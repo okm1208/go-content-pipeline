@@ -59,7 +59,6 @@ func main(){
 
 		}
 	}()
-
 	mqDeliveries , err := mqConn.Channel.Consume("WINTER.Q.DI_TO_TC",
 		"content-pipeline",
 		false,

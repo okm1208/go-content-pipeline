@@ -3,6 +3,7 @@ package module
 import (
 	"content-pipline-example/common"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -21,7 +22,6 @@ func NewExtractHash(inputStream <-chan common.JobContext, errorStream chan commo
 }
 
 func (extractHash *ExtractHash)Run() {
-
 	log.Println("ExtractHash Run ===")
 
 	go func() {
@@ -29,22 +29,34 @@ func (extractHash *ExtractHash)Run() {
 			log.Println("ExtractHash End ===")
 			close(extractHash.outputStream)
 		}()
-		for {
-			select{
-			case job, more := <- extractHash.inputStream:
-				if more {
-					log.Println("Extracting.......")
-					time.Sleep(time.Duration(common.RandSec())*time.Second)
-					job.ExtractHashSuccess = true
-					log.Println("Extract End.")
-					extractHash.outputStream <- job
-				}else{
-					return
+		var wg sync.WaitGroup
+		wg.Add(common.WorkerSize)
+		for i := 0; i < common.WorkerSize; i++ {
+			go func(workerId int) {
+				defer func() {
+					wg.Done()
+					log.Printf("Extract Worker [%d] End\n",workerId)
+				}()
+				log.Printf("Extract Worker [%d] Start\n", workerId)
+				for {
+					select {
+					case job, more := <- extractHash.inputStream:
+						if more {
+							log.Printf("Worker [%d] Extracting..........\n",workerId)
+							time.Sleep(time.Duration(common.RandSec())*time.Second)
+							job.ExtractHashSuccess = true
+							log.Printf("Worker [%d] Extract end.\n",workerId)
+							extractHash.outputStream <- job
+						}else{
+							return
+						}
+					}
 				}
-			}
+			}(i)
 		}
+		log.Println("Worker Create end")
+		wg.Wait()
 	}()
-
 }
 
 

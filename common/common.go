@@ -13,12 +13,11 @@ type JobContext struct {
 
 	Error error
 }
-
+var WorkerSize = 2
 func RandBool() bool {
 	rand.Seed(time.Now().UnixNano())
 	return rand.Intn(2) == 1
 }
-
 
 type QueueMessage struct {
 	TrackId int `json:"trackId"`

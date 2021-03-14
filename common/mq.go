@@ -12,7 +12,6 @@ type MqConn struct {
 
 func (mqConn *MqConn) InitConn(rabbitURL string) error {
 	log.Println("RabbitMQ GetConnection.")
-	//TCP 연결 (물리적)
 	conn, err := amqp.Dial(rabbitURL)
 	if err != nil {
 		return err
@@ -20,8 +19,13 @@ func (mqConn *MqConn) InitConn(rabbitURL string) error {
 	mqConn.Connection = conn
 	log.Println("RabbitMQ Connection success.")
 
-	//채널 연결 (논리적)
 	chnl , err := mqConn.Connection.Channel()
+
+	if err != nil {
+		return err
+	}
+
+	chnl.Qos(1,0, false )
 	if err != nil {
 		return err
 	}
