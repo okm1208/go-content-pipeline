@@ -5,8 +5,18 @@ import (
 )
 import "time"
 
+
+//func DownloadTrackAudioFile(trackId int)(string, error){
+//func ConvertWavFile(trackId int, orgFilePath string, sampleRate string)(string,error){
+//func ExtractorHashFileAndSave (trackId int,orgFilePath string)(string,error){
+
 type JobContext struct {
 	TrackId int
+
+	DownloadResultPath string
+	ConvertWavResultPath string
+	ExtractHashResultPath string
+
 	DownloadSuccess bool
 	ConvertWavSuccess bool
 	ExtractHashSuccess bool

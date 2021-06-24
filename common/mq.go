@@ -39,11 +39,11 @@ func (mqConn *MqConn) CloseConn(){
 	log.Printf("RabbitMq close.\n")
 
 	if err :=mqConn.Channel.Cancel("mi-bulk", true); err != nil {
-		log.Printf("Consumer_cancel_failed: %s %v\n", mqConn.Channel,err)
+		log.Printf("Consumer_cancel_failed: %v\n",err)
 	}
 
 	if err :=mqConn.Channel.Close(); err != nil {
-		log.Printf("Consumer_Close_failed: %s %v\n", mqConn.Channel,err)
+		log.Printf("Consumer_Close_failed: %v\n",err)
 	}
 
 	log.Printf("RabbitMq Channel close.\n")

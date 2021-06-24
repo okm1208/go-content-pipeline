@@ -12,7 +12,6 @@ type DownloadModule struct {
 	inputStream <-chan common.JobContext
 	outputStream chan common.JobContext
 	errorStream chan common.JobContext
-	doneStream chan bool
 }
 func NewDownloadModule(inputStream <-chan common.JobContext ,
 						errorStream chan common.JobContext)(*DownloadModule , error ){

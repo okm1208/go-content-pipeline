@@ -1,8 +1,10 @@
 package main
 
 import (
-	"content-pipline-example/module"
 	"content-pipline-example/common"
+	"content-pipline-example/module"
+	"fmt"
+	"github.com/bradhe/stopwatch"
 	"log"
 	"os"
 	"os/signal"
@@ -31,7 +33,6 @@ func main(){
 
 	jobInitStream := make(chan common.JobContext)
 	jobErrorStream := make(chan common.JobContext)
-
 	jobOutputStream := CreateDefaultPipLine(jobInitStream,jobErrorStream)
 
 	go func(){
@@ -81,6 +82,7 @@ func main(){
 	wg.Wait()
 	log.Println("Main Process End ===")
 }
+
 
 
 
